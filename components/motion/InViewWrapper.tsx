@@ -32,27 +32,33 @@ export const InViewWrapper = ({
 
   const motionVariants = getMotionVariants(variant);
   
-  // Override duration if provided
-  const customVariants = duration ? {
-    ...motionVariants,
-    visible: {
-      ...motionVariants.visible,
-      transition: {
-        ...motionVariants.visible.transition,
-        duration: duration / 1000, // Convert ms to seconds
-        delay: delay / 1000,
-      },
-    },
-  } : {
-    ...motionVariants,
-    visible: {
-      ...motionVariants.visible,
-      transition: {
-        ...motionVariants.visible.transition,
-        delay: delay / 1000,
-      },
-    },
+  // Type guard to check if variant has visible state with transition
+  const hasVisibleState = (variants: any): variants is { visible: { transition?: any }, hidden: any } => {
+    return variants && typeof variants === 'object' && 'visible' in variants && 'hidden' in variants;
   };
+
+  // Only create custom variants if the base variant has visible/hidden states
+  const customVariants = hasVisibleState(motionVariants) ? 
+    (duration ? {
+      ...motionVariants,
+      visible: {
+        ...motionVariants.visible,
+        transition: {
+          ...(motionVariants.visible.transition || {}),
+          duration: duration / 1000, // Convert ms to seconds
+          delay: delay / 1000,
+        },
+      },
+    } : {
+      ...motionVariants,
+      visible: {
+        ...motionVariants.visible,
+        transition: {
+          ...(motionVariants.visible.transition || {}),
+          delay: delay / 1000,
+        },
+      },
+    }) : motionVariants;
 
   return (
     <motion.div

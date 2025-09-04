@@ -167,6 +167,14 @@ export const MOTION_CONFIG = {
         hover: {},
         tap: {},
       },
+      staggerContainer: {
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.05 } },
+      },
+      shimmer: {
+        hidden: {},
+        visible: {},
+      },
     },
   },
 } as const;
