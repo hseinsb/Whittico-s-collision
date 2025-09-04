@@ -22,28 +22,28 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Call Us',
-    content: '(555) 123-4567',
-    href: 'tel:+15551234567',
+    content: '(313) 386-2660',
+    href: 'tel:+13133862660',
     description: 'Speak with our team',
   },
   {
     icon: Mail,
     title: 'Email Us',
-    content: 'info@whitticoscollision.com',
-    href: 'mailto:info@whitticoscollision.com',
+    content: 'info@whitticoscollision.co',
+    href: 'mailto:info@whitticoscollision.co',
     description: 'Get a written quote',
   },
   {
     icon: MapPin,
     title: 'Visit Us',
-    content: '123 Collision Way, Auto City, AC 12345',
-    href: 'https://maps.google.com',
+    content: '1031 Dix Lincoln Park, Michigan, 48146',
+    href: 'https://www.google.com/maps/place/1031+Dix+Ave,+Lincoln+Park,+MI+48146',
     description: 'See our facility',
   },
   {
     icon: Clock,
     title: 'Hours',
-    content: 'Mon-Fri: 8AM-6PM, Sat: 9AM-4PM',
+    content: 'Mon-Fri: 8:30AM-6PM, Sat: 9AM-5PM',
     href: null,
     description: 'We\'re here when you need us',
   },
@@ -162,19 +162,19 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20 lg:py-32 bg-gradient-to-b from-white to-gray-50">
+    <section id="contact" className="py-12 lg:py-20 bg-gradient-to-b from-pure-white to-white-900 border-t border-gray-100/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <InViewWrapper className="text-center mb-16">
+        <InViewWrapper className="text-center mb-12">
           <motion.div
             variants={MOTION_CONFIG.variants.fadeSlideUp}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 font-display">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6 font-display">
               Ready to Discuss a{' '}
               <span className="text-gradient-gold">Partnership?</span>
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-black-50 leading-relaxed">
               Get in touch with our team to learn how we can provide premium 
               collision repair services for your insurance company or rental business.
             </p>
@@ -189,10 +189,10 @@ export const ContactSection = () => {
               className="space-y-8"
             >
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                <h3 className="text-2xl font-bold text-black mb-6">
                   Get in Touch
                 </h3>
-                <p className="text-gray-600 mb-8 leading-relaxed">
+                <p className="text-black-50 mb-8 leading-relaxed">
                   Whether you're an insurance adjuster, rental company manager, 
                   or individual customer, we're here to provide exceptional service 
                   and answer any questions you may have.
@@ -258,20 +258,25 @@ export const ContactSection = () => {
                 ))}
               </div>
 
-              {/* Map Placeholder */}
+              {/* Interactive Google Map */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 viewport={{ once: true }}
-                className="bg-gray-200 rounded-2xl h-64 flex items-center justify-center group hover:bg-gray-300 transition-colors cursor-pointer"
-                onClick={() => window.open('https://maps.google.com', '_blank')}
+                className="rounded-2xl overflow-hidden h-64 shadow-lg"
               >
-                <div className="text-center">
-                  <MapPin className="w-12 h-12 text-gray-500 mx-auto mb-2 group-hover:text-gold-600 transition-colors" />
-                  <p className="text-gray-600 font-medium">Interactive Map</p>
-                  <p className="text-gray-500 text-sm">Click to view directions</p>
-                </div>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2951.8!2d-83.1786!3d42.2581!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x883b356c5c5c5c5c%3A0x5c5c5c5c5c5c5c5c!2s1031%20Dix%20Ave%2C%20Lincoln%20Park%2C%20MI%2048146%2C%20USA!5e0!3m2!1sen!2sus!4v1699999999999!5m2!1sen!2sus"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Whittico's Collision Location"
+                  className="rounded-2xl"
+                />
               </motion.div>
             </motion.div>
           </InViewWrapper>

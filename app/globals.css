@@ -44,7 +44,7 @@
 
   /* Gold gradient text */
   .text-gradient-gold {
-    background: linear-gradient(135deg, #f6e197 0%, #e8b347 50%, #d19533 100%);
+    background: linear-gradient(135deg, #ffd700 0%, #e6c200 50%, #ccad00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -52,9 +52,19 @@
 
   /* Animated gradient backgrounds */
   .bg-gradient-animated {
-    background: linear-gradient(-45deg, #f6e197, #e8b347, #d19533, #b5762a);
+    background: linear-gradient(-45deg, #ffd700, #e6c200, #ccad00, #b39900);
     background-size: 400% 400%;
     animation: gradient-x 15s ease infinite;
+  }
+
+  /* Pure black backgrounds */
+  .bg-pure-black {
+    background-color: #000000;
+  }
+
+  /* Pure white backgrounds */
+  .bg-pure-white {
+    background-color: #ffffff;
   }
 
   /* Button shimmer effect */
@@ -85,7 +95,7 @@
 
   /* Focus styles for accessibility */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2;
   }
 
   /* Custom scrollbar */
@@ -94,17 +104,17 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #ffffff;
     border-radius: 4px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #d19533;
+    background: #ffd700;
     border-radius: 4px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #b5762a;
+    background: #e6c200;
   }
 }
 

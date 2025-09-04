@@ -9,7 +9,6 @@ const navigation = [
   { name: 'Home', href: '#home' },
   { name: 'Services', href: '#services' },
   { name: 'About', href: '#about' },
-  { name: 'Team', href: '#team' },
   { name: 'Contact', href: '#contact' },
 ];
 
@@ -93,11 +92,11 @@ export const Header = () => {
   const linkVariants = {
     rest: { 
       scale: 1,
-      color: '#374151',
+      color: '#000000',
     },
     hover: { 
       scale: 1.02,
-      color: '#d19533',
+      color: '#ffd700',
       transition: {
         duration: MOTION_CONFIG.durations.fast / 1000,
         ease: MOTION_CONFIG.easing.easeOut,
@@ -190,11 +189,20 @@ export const Header = () => {
               className="hidden lg:flex items-center space-x-4"
             >
               <a
-                href="tel:+1234567890"
-                className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gold-600 transition-colors focus-ring rounded-md px-2 py-1"
+                href="tel:+13133862660"
+                className="flex items-center space-x-2 text-sm text-black hover:text-gold-500 transition-colors focus-ring rounded-md px-2 py-1"
               >
                 <Phone className="w-4 h-4" />
-                <span>(123) 456-7890</span>
+                <span>(313) 386-2660</span>
+              </a>
+              <a
+                href="https://www.google.com/maps/place/1031+Dix+Ave,+Lincoln+Park,+MI+48146"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-sm text-black hover:text-gold-500 transition-colors focus-ring rounded-md px-2 py-1"
+              >
+                <MapPin className="w-4 h-4" />
+                <span>1031 Dix, Lincoln Park, MI</span>
               </a>
               <motion.button
                 variants={MOTION_CONFIG.variants.buttonHover}
@@ -202,7 +210,7 @@ export const Header = () => {
                 whileHover="hover"
                 whileTap="tap"
                 onClick={() => handleNavClick('#contact')}
-                className="bg-gold-500 text-white px-4 py-2 rounded-lg text-sm font-medium btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
+                className="bg-gold-500 text-black px-4 py-2 rounded-lg text-sm font-medium btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
               >
                 Get Quote
               </motion.button>
@@ -219,7 +227,7 @@ export const Header = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gold-600 focus-ring"
+              className="lg:hidden p-2 rounded-md text-black hover:text-gold-500 focus-ring"
             >
               <Menu className="w-6 h-6" />
             </motion.button>
@@ -246,7 +254,7 @@ export const Header = () => {
               initial="closed"
               animate="open"
               exit="closed"
-              className="fixed top-0 right-0 bottom-0 z-50 w-80 max-w-sm bg-white shadow-xl lg:hidden"
+              className="fixed top-0 right-0 bottom-0 z-50 w-80 max-w-sm bg-pure-white shadow-xl lg:hidden"
             >
               <div className="flex items-center justify-between p-4 border-b">
                 <h2 className="text-lg font-semibold text-gradient-gold font-display">
@@ -256,7 +264,7 @@ export const Header = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 rounded-md text-gray-600 hover:text-gold-600 focus-ring"
+                  className="p-2 rounded-md text-black hover:text-gold-500 focus-ring"
                 >
                   <X className="w-6 h-6" />
                 </motion.button>
@@ -276,8 +284,8 @@ export const Header = () => {
                       onClick={() => handleNavClick(item.href)}
                       className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium focus-ring transition-colors ${
                         activeSection === item.href.slice(1)
-                          ? 'text-gold-600 bg-gold-50'
-                          : 'text-gray-900 hover:text-gold-600 hover:bg-gray-50'
+                          ? 'text-gold-500 bg-gold-50'
+                          : 'text-black hover:text-gold-500 hover:bg-white-900'
                       }`}
                     >
                       {item.name}
@@ -287,11 +295,21 @@ export const Header = () => {
                 
                 <div className="mt-6 pt-6 border-t space-y-4">
                   <a
-                    href="tel:+1234567890"
-                    className="flex items-center space-x-3 text-gray-600 hover:text-gold-600 transition-colors focus-ring rounded-md px-3 py-2"
+                    href="tel:+13133862660"
+                    className="flex items-center space-x-3 text-black hover:text-gold-500 transition-colors focus-ring rounded-md px-3 py-2"
                   >
                     <Phone className="w-5 h-5" />
-                    <span>(123) 456-7890</span>
+                    <span>(313) 386-2660</span>
+                  </a>
+                  
+                  <a
+                    href="https://www.google.com/maps/place/1031+Dix+Ave,+Lincoln+Park,+MI+48146"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 text-black hover:text-gold-500 transition-colors focus-ring rounded-md px-3 py-2"
+                  >
+                    <MapPin className="w-5 h-5" />
+                    <span>1031 Dix, Lincoln Park, MI</span>
                   </a>
                   
                   <motion.button
@@ -300,7 +318,7 @@ export const Header = () => {
                     whileHover="hover"
                     whileTap="tap"
                     onClick={() => handleNavClick('#contact')}
-                    className="w-full bg-gold-500 text-white px-4 py-3 rounded-lg font-medium btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
+                    className="w-full bg-gold-500 text-black px-4 py-3 rounded-lg font-medium btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
                   >
                     Get Quote
                   </motion.button>

@@ -8,22 +8,55 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        gold: {
-          50: '#fefdf7',
-          100: '#fdf8e4',
-          200: '#faefc4',
-          300: '#f6e197',
-          400: '#f0cc68',
-          500: '#e8b347',
-          600: '#d19533',
-          700: '#b5762a',
-          800: '#975f28',
-          900: '#7d4f25',
+        // Pure black, white, gold color palette
+        black: {
+          DEFAULT: '#000000',
+          50: '#1f1f1f', // Very dark but readable
+          100: '#0f0f0f',
+          200: '#050505',
+          300: '#020202',
+          400: '#010101',
+          500: '#000000',
+          600: '#000000',
+          700: '#000000',
+          800: '#000000',
+          900: '#000000',
         },
+        white: {
+          DEFAULT: '#ffffff',
+          50: '#ffffff',
+          100: '#fefefe',
+          200: '#fdfdfd',
+          300: '#fcfcfc',
+          400: '#fafafa',
+          500: '#f8f8f8',
+          600: '#f5f5f5',
+          700: '#f0f0f0',
+          800: '#e8e8e8',
+          900: '#e0e0e0',
+        },
+        gold: {
+          50: '#fffdf5',
+          100: '#fffae6',
+          200: '#fff5cc',
+          300: '#ffeb99',
+          400: '#ffdd66',
+          500: '#ffd700', // Pure gold
+          600: '#e6c200',
+          700: '#ccad00',
+          800: '#b39900',
+          900: '#997a00',
+        },
+        // Keep glass effects for modern look
         glass: {
           50: 'rgba(255, 255, 255, 0.1)',
           100: 'rgba(255, 255, 255, 0.2)',
           200: 'rgba(255, 255, 255, 0.3)',
+          dark: {
+            50: 'rgba(0, 0, 0, 0.1)',
+            100: 'rgba(0, 0, 0, 0.2)',
+            200: 'rgba(0, 0, 0, 0.3)',
+          }
         }
       },
       fontFamily: {

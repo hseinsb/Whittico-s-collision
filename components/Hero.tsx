@@ -2,16 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Play, Shield, Award, Users, ArrowRight } from 'lucide-react';
+import { Play, Shield, Award, Users } from 'lucide-react';
 import { MOTION_CONFIG } from '@/lib/motion-config';
 
-interface HeroFormData {
-  name: string;
-  email: string;
-  phone: string;
-  userType: string;
-  message: string;
-}
 
 const trustBadges = [
   {
@@ -36,19 +29,9 @@ export const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
-  const [formData, setFormData] = useState<HeroFormData>({
-    name: '',
-    email: '',
-    phone: '',
-    userType: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 800], [0, -200]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
 
   useEffect(() => {
     // Simulate video loading - in real implementation, use actual video
@@ -72,75 +55,6 @@ export const Hero = () => {
     console.log('Opening video modal');
   };
 
-  const handleInputChange = (field: keyof HeroFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (submitStatus !== 'idle') {
-      setSubmitStatus('idle');
-    }
-  };
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Basic validation
-    if (!formData.name.trim() || !formData.message.trim()) {
-      setSubmitStatus('error');
-      return;
-    }
-
-    if (!formData.email.trim() && !formData.phone.trim()) {
-      setSubmitStatus('error');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
-
-    try {
-      const submissionData = {
-        timestamp: new Date().toISOString(),
-        source: 'hero-estimate',
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        subject: 'Free Estimate Request',
-        message: formData.message.trim(),
-        vehicle: '', // Will be discussed during estimate
-        insurer: '',
-        claimNo: '',
-        photos: '',
-        userType: formData.userType,
-        ip: '', // Will be set server-side
-        userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : '',
-      };
-
-      const response = await fetch('/api/submit-contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submissionData),
-      });
-
-      if (response.ok) {
-        setSubmitStatus('success');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          userType: '',
-          message: '',
-        });
-      } else {
-        throw new Error('Failed to submit form');
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const containerVariants = {
     hidden: {},
@@ -218,54 +132,26 @@ export const Hero = () => {
     },
   };
 
-  const buttonHoverVariants = {
-    rest: {
-      scale: 1,
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-    },
-    hover: {
-      scale: 1.02,
-      boxShadow: '0 20px 40px rgba(209, 149, 51, 0.3)',
-      transition: {
-        duration: MOTION_CONFIG.durations.fast / 1000,
-        ease: MOTION_CONFIG.easing.easeOut,
-      },
-    },
-    tap: {
-      scale: 0.98,
-    },
-  };
-
-  const arrowVariants = {
-    rest: { x: 0 },
-    hover: { 
-      x: 4,
-      transition: {
-        duration: MOTION_CONFIG.durations.fast / 1000,
-        ease: MOTION_CONFIG.easing.easeOut,
-      },
-    },
-  };
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden py-16"
     >
       {/* Video Background */}
       <motion.div
-        style={{ y, opacity }}
+        style={{ y }}
         className="absolute inset-0 z-0"
       >
         {/* Placeholder for video - in real implementation use actual video */}
         <div 
-          className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
+          className="absolute inset-0 bg-gradient-to-br from-pure-white via-white to-pure-white"
           style={{
             backgroundImage: `
-              radial-gradient(circle at 20% 50%, rgba(209, 149, 51, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(209, 149, 51, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 40% 80%, rgba(209, 149, 51, 0.08) 0%, transparent 50%)
+              radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at 40% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 50%)
             `,
           }}
         />
@@ -275,7 +161,7 @@ export const Hero = () => {
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-gold-400 rounded-full opacity-60"
+              className="absolute w-1 h-1 bg-gold-500 rounded-full opacity-60"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -295,8 +181,8 @@ export const Hero = () => {
           ))}
         </div>
 
-        {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50" />
+        {/* Light overlay for text readability */}
+        <div className="absolute inset-0 bg-white/20" />
       </motion.div>
 
       {/* Content */}
@@ -310,162 +196,59 @@ export const Hero = () => {
           {/* Main Headline */}
           <motion.h1
             variants={headlineVariants}
-            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 text-shadow-lg font-display"
+            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-black mb-6 font-display"
           >
-            Continuity You Can{' '}
-            <span className="text-gradient-gold">Count On</span>
+            Premium Collision Repair{' '}
+            <span className="text-gradient-gold">Excellence</span>
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
             variants={subheadVariants}
-            className="text-xl sm:text-2xl lg:text-3xl text-gray-200 mb-8 text-shadow-md font-light"
+            className="text-xl sm:text-2xl lg:text-3xl text-black-50 mb-8 font-light"
           >
             Premium collision repair with 60+ years of family expertise.
             <br className="hidden sm:block" />
-            Trusted by insurance companies and rental partners.
+            Trusted by insurance companies.
           </motion.p>
 
-          {/* Quick Contact Form */}
+          {/* Call to Action Buttons */}
           <motion.div
             variants={ctaVariants}
-            className="max-w-2xl mx-auto mb-12"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
           >
-            <div className="glass-effect p-8 rounded-2xl border border-white/20">
-              <h3 className="text-2xl font-bold text-white mb-2 text-center">
-                Schedule Your Free Estimate
-              </h3>
-              <p className="text-gray-200 text-center mb-6">
-                We'll inspect your vehicle and provide a detailed estimate on-site
-              </p>
-              
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      value={formData.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
-                      required
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent backdrop-blur-sm"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent backdrop-blur-sm"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="tel"
-                      placeholder="Phone Number"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent backdrop-blur-sm"
-                    />
-                  </div>
-                  <div>
-                    <select 
-                      value={formData.userType}
-                      onChange={(e) => handleInputChange('userType', e.target.value)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent backdrop-blur-sm"
-                    >
-                      <option value="" className="bg-gray-800">I'm an...</option>
-                      <option value="insurance" className="bg-gray-800">Insurance Adjuster</option>
-                      <option value="rental" className="bg-gray-800">Rental Company</option>
-                      <option value="fleet" className="bg-gray-800">Fleet Manager</option>
-                      <option value="individual" className="bg-gray-800">Individual Customer</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div>
-                  <textarea
-                    rows={3}
-                    placeholder="Describe the damage and preferred appointment time..."
-                    value={formData.message}
-                    onChange={(e) => handleInputChange('message', e.target.value)}
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-transparent backdrop-blur-sm resize-none"
-                  />
-                </div>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
                   <motion.button
-                    variants={buttonHoverVariants}
+              variants={MOTION_CONFIG.variants.buttonHover}
                     initial="rest"
-                    whileHover={!isSubmitting ? "hover" : "rest"}
-                    whileTap={!isSubmitting ? "tap" : "rest"}
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`flex-1 px-6 py-3 rounded-lg font-semibold focus-ring transition-colors flex items-center justify-center space-x-2 ${
-                      submitStatus === 'success' 
-                        ? 'bg-green-500 text-white hover:bg-green-600' 
-                        : submitStatus === 'error'
-                        ? 'bg-red-500 text-white hover:bg-red-600'
-                        : isSubmitting
-                        ? 'bg-gold-400 text-white cursor-not-allowed'
-                        : 'bg-gold-500 text-white btn-shimmer hover:bg-gold-600'
-                    }`}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                        />
-                        <span>Submitting...</span>
-                      </>
-                    ) : submitStatus === 'success' ? (
-                      <>
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="w-5 h-5 rounded-full bg-white flex items-center justify-center"
-                        >
-                          <div className="w-2 h-2 bg-green-500 rounded-full" />
-                        </motion.div>
-                        <span>Request Sent!</span>
-                      </>
-                    ) : submitStatus === 'error' ? (
-                      <>
-                        <span>❌</span>
-                        <span>Try Again</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Schedule Free Estimate</span>
-                        <motion.div variants={arrowVariants}>
-                          <ArrowRight className="w-5 h-5" />
-                        </motion.div>
-                      </>
-                    )}
+              whileHover="hover"
+              whileTap="tap"
+              onClick={() => {
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="bg-gold-500 text-black px-8 py-4 rounded-lg text-lg font-semibold btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
+            >
+              Get Free Estimate
                   </motion.button>
                   
                   <motion.button
-                    variants={buttonHoverVariants}
+              variants={MOTION_CONFIG.variants.buttonHover}
                     initial="rest"
                     whileHover="hover"
                     whileTap="tap"
-                    type="button"
-                    onClick={handleWatchVideo}
-                    className="glass-effect text-white px-6 py-3 rounded-lg font-semibold focus-ring hover:bg-white/20 transition-colors flex items-center justify-center space-x-2"
+                    onClick={() => {
+                      const aboutSection = document.getElementById('about');
+                      if (aboutSection) {
+                        aboutSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+              className="glass-effect text-black px-8 py-4 rounded-lg text-lg font-semibold focus-ring hover:bg-black/10 transition-colors flex items-center space-x-2"
                   >
                     <Play className="w-5 h-5" />
-                    <span>Watch Story</span>
+              <span>Our Story</span>
                   </motion.button>
-                </div>
-              </form>
-            </div>
           </motion.div>
 
           {/* Trust Badges */}
@@ -485,17 +268,17 @@ export const Hero = () => {
                     ease: MOTION_CONFIG.easing.easeOut,
                   },
                 }}
-                className="group glass-effect text-white p-6 rounded-xl hover:bg-white/20 transition-all duration-300 cursor-default"
+                className="group glass-effect text-black p-6 rounded-xl hover:bg-black/10 transition-all duration-300 cursor-default"
               >
                 <div className="flex flex-col items-center text-center space-y-3">
                   <div className="p-3 bg-gold-500/20 rounded-full group-hover:bg-gold-500/30 transition-colors">
-                    <badge.icon className="w-6 h-6 text-gold-400" />
+                    <badge.icon className="w-6 h-6 text-gold-500" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-white">
+                    <h3 className="font-semibold text-lg text-black">
                       {badge.text}
                     </h3>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-black-50 text-sm">
                       {badge.description}
                     </p>
                   </div>
@@ -521,12 +304,12 @@ export const Hero = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
+          className="w-6 h-10 border-2 border-black/50 rounded-full flex justify-center"
         >
           <motion.div
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-1 h-3 bg-white/70 rounded-full mt-2"
+            className="w-1 h-3 bg-black/70 rounded-full mt-2"
           />
         </motion.div>
       </motion.div>

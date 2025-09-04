@@ -70,14 +70,14 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
           <div className="flex-grow">
             <div className="flex items-center space-x-2 mb-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <h3 className="text-lg font-bold text-gray-900">
+              <h3 className="text-lg font-bold text-black">
                 Whittico's Advantage
               </h3>
             </div>
             <h4 className="text-xl font-semibold text-green-800 mb-3">
               {advantage.title}
             </h4>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-black-50 leading-relaxed">
               {advantage.whitticos}
             </p>
           </div>
@@ -110,14 +110,14 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
           <div className="flex-grow">
             <div className="flex items-center space-x-2 mb-2">
               <X className="w-5 h-5 text-red-500" />
-              <h3 className="text-lg font-bold text-gray-900">
+              <h3 className="text-lg font-bold text-black">
                 Typical Collision Shops
               </h3>
             </div>
             <h4 className="text-xl font-semibold text-red-800 mb-3">
               {advantage.title}
             </h4>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-black-50 leading-relaxed">
               {advantage.typical}
             </p>
           </div>
@@ -136,19 +136,19 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
 
 export const PartnerAdvantages = () => {
   return (
-    <section id="services" className="py-20 lg:py-32 bg-white">
+    <section id="services" className="py-12 lg:py-20 bg-pure-white border-t border-gray-100/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <InViewWrapper className="text-center mb-16">
+        <InViewWrapper className="text-center mb-12">
           <motion.div
             variants={MOTION_CONFIG.variants.fadeSlideUp}
             className="max-w-4xl mx-auto"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 font-display">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6 font-display">
               Why Insurance Companies{' '}
               <span className="text-gradient-gold">Choose Us</span>
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-black-50 leading-relaxed">
               See the clear difference between Whittico's premium service 
               and typical collision repair shops.
             </p>
@@ -173,10 +173,10 @@ export const PartnerAdvantages = () => {
             className="bg-gradient-to-r from-gold-50 via-yellow-50 to-gold-50 rounded-3xl p-8 lg:p-12"
           >
             <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              <h3 className="text-3xl font-bold text-black mb-4">
                 The Numbers Speak for Themselves
               </h3>
-              <p className="text-gray-600 text-lg">
+              <p className="text-black-50 text-lg">
                 Our partnership results in measurable benefits for everyone involved.
               </p>
             </div>
@@ -185,31 +185,31 @@ export const PartnerAdvantages = () => {
               <motion.div
                 whileHover={{ scale: 1.05, y: -5 }}
                 transition={{ duration: 0.2 }}
-                className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all"
+                className="text-center p-6 bg-pure-white rounded-2xl shadow-sm hover:shadow-lg transition-all"
               >
                 <div className="text-4xl font-bold text-gold-600 mb-2">98%</div>
-                <div className="text-gray-900 font-semibold mb-1">Customer Satisfaction</div>
-                <div className="text-gray-600 text-sm">Insurance partner feedback</div>
+                <div className="text-black font-semibold mb-1">Customer Satisfaction</div>
+                <div className="text-black-50 text-sm">Insurance partner feedback</div>
               </motion.div>
 
               <motion.div
                 whileHover={{ scale: 1.05, y: -5 }}
                 transition={{ duration: 0.2 }}
-                className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all"
+                className="text-center p-6 bg-pure-white rounded-2xl shadow-sm hover:shadow-lg transition-all"
               >
-                <div className="text-4xl font-bold text-gold-600 mb-2">2.3x</div>
-                <div className="text-gray-900 font-semibold mb-1">Faster Turnaround</div>
-                <div className="text-gray-600 text-sm">Compared to industry average</div>
+                <div className="text-4xl font-bold text-gold-600 mb-2">5.0</div>
+                <div className="text-black font-semibold mb-1">Star Rating</div>
+                <div className="text-black-50 text-sm">Consistently excellent reviews</div>
               </motion.div>
 
               <motion.div
                 whileHover={{ scale: 1.05, y: -5 }}
                 transition={{ duration: 0.2 }}
-                className="text-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all"
+                className="text-center p-6 bg-pure-white rounded-2xl shadow-sm hover:shadow-lg transition-all"
               >
                 <div className="text-4xl font-bold text-gold-600 mb-2">$0</div>
-                <div className="text-gray-900 font-semibold mb-1">Customer Paperwork</div>
-                <div className="text-gray-600 text-sm">We handle all insurance coordination</div>
+                <div className="text-black font-semibold mb-1">Customer Paperwork</div>
+                <div className="text-black-50 text-sm">We handle all insurance coordination</div>
               </motion.div>
             </div>
           </motion.div>
@@ -221,10 +221,10 @@ export const PartnerAdvantages = () => {
             variants={MOTION_CONFIG.variants.fadeSlideUp}
             className="max-w-2xl mx-auto"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <h3 className="text-2xl font-bold text-black mb-4">
               Ready to Experience the Difference?
             </h3>
-            <p className="text-gray-600 mb-8">
+            <p className="text-black-50 mb-8">
               Partner with us for seamless collision repair that exceeds expectations.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -233,7 +233,7 @@ export const PartnerAdvantages = () => {
                 initial="rest"
                 whileHover="hover"
                 whileTap="tap"
-                className="bg-gold-500 text-white px-8 py-3 rounded-lg font-semibold btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
+                className="bg-gold-500 text-black px-8 py-3 rounded-lg font-semibold btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
                 onClick={() => {
                   const contactSection = document.getElementById('contact');
                   if (contactSection) {

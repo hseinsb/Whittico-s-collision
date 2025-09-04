@@ -17,7 +17,7 @@ const expertiseTiles = [
   {
     icon: Award,
     title: 'Master Certified',
-    description: 'ASE and I-CAR certified technicians',
+    description: 'Certified by the State of Michigan in mechanical systems, collision repair, and structural body restoration—fully licensed and trained to meet rigorous industry standards, with additional I-CAR certification in advanced collision and structural repair techniques.',
     stat: '15+',
     unit: 'Certifications',
   },
@@ -32,7 +32,7 @@ const expertiseTiles = [
     icon: Wrench,
     title: 'Advanced Equipment',
     description: 'State-of-the-art repair technology',
-    stat: '$2M+',
+    stat: '$1M+',
     unit: 'Investment',
   },
   {
@@ -52,24 +52,24 @@ const expertiseTiles = [
 ];
 
 const milestones = [
-  { year: '1962', event: 'Founded by Robert Whittico Sr.' },
-  { year: '1987', event: 'Expanded to current 15,000 sq ft facility' },
+  { year: '1962', event: 'Where it all began' },
+  { year: '1987', event: 'Expanded to current  ≈13,000 sq ft facility' },
   { year: '2003', event: 'Second generation takes leadership' },
   { year: '2018', event: 'Major equipment modernization' },
-  { year: '2024', event: 'Third generation joins the business' },
+  { year: '2025', event: 'Third generation joins the business' },
 ];
 
 export const ExpertiseSection = () => {
   return (
-    <section id="about" className="py-20 lg:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+    <section id="about" className="py-12 lg:py-20 bg-gradient-to-b from-white-900 to-pure-white relative overflow-hidden border-t border-gray-100/50">
       {/* Background gradient animation */}
       <div className="absolute inset-0 opacity-30">
         <motion.div
           animate={{
             background: [
-              'radial-gradient(circle at 20% 80%, rgba(209, 149, 51, 0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 80% 20%, rgba(209, 149, 51, 0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 40% 40%, rgba(209, 149, 51, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 40% 40%, rgba(255, 215, 0, 0.1) 0%, transparent 50%)',
             ]
           }}
           transition={{
@@ -83,17 +83,17 @@ export const ExpertiseSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
-        <InViewWrapper className="text-center mb-16">
+        <InViewWrapper className="text-center mb-12">
           <motion.div
             variants={MOTION_CONFIG.variants.fadeSlideUp}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 font-display">
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6 font-display">
               <span className="text-gradient-gold">60+ Years</span> of
               <br />
               Collision Repair Expertise
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-black-50 leading-relaxed">
               Three generations of the Whittico family have built a legacy of 
               premium collision repair, combining traditional craftsmanship 
               with cutting-edge technology.
@@ -118,7 +118,7 @@ export const ExpertiseSection = () => {
                     ease: MOTION_CONFIG.easing.easeOut,
                   },
                 }}
-                className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-default border border-gray-100 hover:border-gold-200 relative overflow-hidden"
+                className="group bg-pure-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-default border border-white-800 hover:border-gold-200 relative overflow-hidden"
               >
                 {/* Background pattern */}
                 <div className="absolute top-0 right-0 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -135,17 +135,17 @@ export const ExpertiseSection = () => {
                       <div className="text-2xl font-bold text-gold-600">
                         {tile.stat}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-black-50">
                         {tile.unit}
                       </div>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gold-700 transition-colors">
+                  <h3 className="text-lg font-bold text-black mb-2 group-hover:text-gold-700 transition-colors">
                     {tile.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-black-50 leading-relaxed">
                     {tile.description}
                   </p>
 
@@ -172,10 +172,10 @@ export const ExpertiseSection = () => {
             className="bg-gradient-to-r from-gold-50 via-yellow-50 to-gold-50 rounded-3xl p-8 lg:p-12"
           >
             <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              <h3 className="text-3xl font-bold text-black mb-4">
                 Our Journey Through the Decades
               </h3>
-              <p className="text-gray-600 text-lg">
+              <p className="text-black-50 text-lg">
                 Building trust and expertise one repair at a time
               </p>
             </div>
@@ -203,7 +203,7 @@ export const ExpertiseSection = () => {
                     <div className="flex-1 lg:px-8">
                       <motion.div
                         whileHover={{ scale: 1.02 }}
-                        className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+                        className="bg-pure-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
                       >
                         <div className="flex items-center space-x-3 mb-3 justify-center lg:justify-start">
                           <CheckCircle className="w-5 h-5 text-green-500" />
@@ -211,7 +211,7 @@ export const ExpertiseSection = () => {
                             {milestone.year}
                           </span>
                         </div>
-                        <p className="text-gray-700 font-medium">
+                        <p className="text-black-50 font-medium">
                           {milestone.event}
                         </p>
                       </motion.div>
@@ -229,44 +229,6 @@ export const ExpertiseSection = () => {
           </motion.div>
         </InViewWrapper>
 
-        {/* CTA */}
-        <InViewWrapper delay={1000} className="text-center mt-16">
-          <motion.div
-            variants={MOTION_CONFIG.variants.fadeSlideUp}
-            className="max-w-2xl mx-auto"
-          >
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Experience Six Decades of Excellence
-            </h3>
-            <p className="text-gray-600 mb-8">
-              Trust your vehicle to the collision repair experts who have been 
-              perfecting their craft for over 60 years.
-            </p>
-            <motion.button
-              variants={MOTION_CONFIG.variants.buttonHover}
-              initial="rest"
-              whileHover="hover"
-              whileTap="tap"
-              className="bg-gold-500 text-white px-8 py-3 rounded-lg font-semibold btn-shimmer focus-ring hover:bg-gold-600 transition-colors inline-flex items-center space-x-2"
-              onClick={() => {
-                const contactSection = document.getElementById('contact');
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            >
-              <span>Experience Our Legacy</span>
-              <motion.div
-                variants={{
-                  rest: { x: 0 },
-                  hover: { x: 4 },
-                }}
-              >
-                <TrendingUp className="w-5 h-5" />
-              </motion.div>
-            </motion.button>
-          </motion.div>
-        </InViewWrapper>
       </div>
     </section>
   );
