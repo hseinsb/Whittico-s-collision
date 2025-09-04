@@ -47,21 +47,19 @@ const advantages = [
 
 const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; index: number }) => {
   return (
-    <motion.div
-      variants={MOTION_CONFIG.variants.fadeSlideUp}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center group"
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center group"
     >
       {/* Whittico's Advantages */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{
-          duration: 0.6,
+          duration: 0.3,
           ease: "easeOut",
-          delay: index * 0.1,
+          delay: 0,
         }}
-        viewport={{ once: true, margin: '-50px' }}
-        className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 lg:p-8 rounded-2xl border border-green-100 hover:border-green-200 transition-all duration-300 hover:shadow-lg"
+        viewport={{ once: true, margin: '-100px' }}
+        className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 sm:p-6 lg:p-8 rounded-2xl border border-green-100 hover:border-green-200 transition-all duration-300 hover:shadow-lg"
       >
         <div className="flex items-start space-x-4">
           <div className="flex-shrink-0 p-3 bg-green-100 rounded-xl group-hover:bg-green-200 transition-colors">
@@ -96,12 +94,12 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{
-          duration: 0.6,
+          duration: 0.3,
           ease: "easeOut",
-          delay: (index * 0.1) + 0.15,
+          delay: 0.1,
         }}
-        viewport={{ once: true, margin: '-50px' }}
-        className="bg-gradient-to-br from-red-50 to-rose-50 p-6 lg:p-8 rounded-2xl border border-red-100 hover:border-red-200 transition-all duration-300 hover:shadow-lg"
+        viewport={{ once: true, margin: '-100px' }}
+        className="bg-gradient-to-br from-red-50 to-rose-50 p-4 sm:p-6 lg:p-8 rounded-2xl border border-red-100 hover:border-red-200 transition-all duration-300 hover:shadow-lg"
       >
         <div className="flex items-start space-x-4">
           <div className="flex-shrink-0 p-3 bg-red-100 rounded-xl group-hover:bg-red-200 transition-colors">
@@ -130,7 +128,7 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
           className="absolute inset-0 bg-gradient-to-br from-red-400/5 to-rose-400/5 rounded-2xl pointer-events-none"
         />
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
