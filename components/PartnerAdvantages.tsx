@@ -53,12 +53,12 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
     >
       {/* Whittico's Advantages */}
       <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         transition={{
-          duration: MOTION_CONFIG.durations.slow / 1000,
-          ease: MOTION_CONFIG.easing.easeOut,
-          delay: index * MOTION_CONFIG.stagger.fast,
+          duration: 0.6,
+          ease: "easeOut",
+          delay: index * 0.1,
         }}
         viewport={{ once: true, margin: '-50px' }}
         className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 lg:p-8 rounded-2xl border border-green-100 hover:border-green-200 transition-all duration-300 hover:shadow-lg"
@@ -93,12 +93,12 @@ const AdvantageRow = ({ advantage, index }: { advantage: typeof advantages[0]; i
 
       {/* Typical Shops */}
       <motion.div
-        initial={{ opacity: 0, x: 30 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         transition={{
-          duration: MOTION_CONFIG.durations.slow / 1000,
-          ease: MOTION_CONFIG.easing.easeOut,
-          delay: (index * MOTION_CONFIG.stagger.fast) + 0.12,
+          duration: 0.6,
+          ease: "easeOut",
+          delay: (index * 0.1) + 0.15,
         }}
         viewport={{ once: true, margin: '-50px' }}
         className="bg-gradient-to-br from-red-50 to-rose-50 p-6 lg:p-8 rounded-2xl border border-red-100 hover:border-red-200 transition-all duration-300 hover:shadow-lg"

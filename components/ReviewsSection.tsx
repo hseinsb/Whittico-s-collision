@@ -80,47 +80,45 @@ const ReviewCard = ({ review }: { review: typeof reviews[0] }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="bg-pure-white rounded-2xl p-8 shadow-xl border border-white-200 mx-auto max-w-4xl"
+      className="bg-pure-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white-200 mx-auto max-w-4xl"
     >
       {/* Quote Icon */}
-      <div className="flex items-start justify-between mb-6">
-        <Quote className="w-12 h-12 text-gold-500 opacity-60" />
+      <div className="flex items-start justify-between mb-4 sm:mb-6">
+        <Quote className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-gold-500 opacity-60" />
         <div className="flex">
           {[...Array(review.rating)].map((_, i) => (
-            <Star key={i} className="w-6 h-6 text-gold-500 fill-current" />
+            <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gold-500 fill-current" />
           ))}
         </div>
       </div>
 
       {/* Review Text */}
-      <blockquote className="text-black-50 text-xl lg:text-2xl leading-relaxed mb-8 italic text-center">
+      <blockquote className="text-black-50 text-lg sm:text-xl lg:text-2xl leading-relaxed mb-6 sm:mb-8 italic text-center px-2">
         "{review.experience}"
       </blockquote>
 
       {/* Customer Info */}
-      <div className="flex items-center justify-center mb-6">
-        <div className="flex items-center space-x-4">
-          <div className="w-14 h-14 bg-gold-100 rounded-full flex items-center justify-center">
-            <User className="w-7 h-7 text-gold-600" />
-          </div>
-          <div className="text-center">
-            <h4 className="font-bold text-black text-lg">{review.name}</h4>
-            <div className="flex items-center justify-center space-x-2 text-black-50">
-              <Car className="w-4 h-4" />
-              <span>{review.vehicle} Owner</span>
-              <span>•</span>
-              <span>{review.date}</span>
-            </div>
+      <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-6 space-y-3 sm:space-y-0 sm:space-x-4">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gold-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <User className="w-6 h-6 sm:w-7 sm:h-7 text-gold-600" />
+        </div>
+        <div className="text-center sm:text-left">
+          <h4 className="font-bold text-black text-lg sm:text-xl">{review.name}</h4>
+          <div className="flex items-center justify-center sm:justify-start space-x-2 text-black-50 text-sm sm:text-base">
+            <Car className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span>{review.vehicle} Owner</span>
+            <span>•</span>
+            <span>{review.date}</span>
           </div>
         </div>
       </div>
 
       {/* Highlights */}
-      <div className="flex flex-wrap gap-3 justify-center">
+      <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
         {review.highlights.map((highlight, i) => (
           <span
             key={i}
-            className="px-4 py-2 bg-gold-100 text-gold-700 text-sm font-medium rounded-full"
+            className="px-3 py-1 sm:px-4 sm:py-2 bg-gold-100 text-gold-700 text-xs sm:text-sm font-medium rounded-full"
           >
             {highlight}
           </span>
@@ -198,37 +196,56 @@ export const ReviewsSection = () => {
 
         {/* Slideshow Container */}
         <div className="relative">
-          {/* Navigation Buttons */}
+          {/* Navigation Buttons - Hidden on mobile to prevent overlap */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors focus-ring"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 sm:p-3 hover:bg-gray-50 transition-colors focus-ring hidden sm:block"
             aria-label="Previous review"
           >
-            <ChevronLeft className="w-6 h-6 text-black" />
+            <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 text-black" />
           </button>
           
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors focus-ring"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 sm:p-3 hover:bg-gray-50 transition-colors focus-ring hidden sm:block"
             aria-label="Next review"
           >
-            <ChevronRight className="w-6 h-6 text-black" />
+            <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 text-black" />
           </button>
 
           {/* Reviews Slideshow */}
-          <div className="min-h-[400px] flex items-center justify-center">
+          <div className="min-h-[350px] sm:min-h-[400px] flex items-center justify-center px-4 sm:px-8">
             <AnimatePresence mode="wait">
               <ReviewCard key={currentSlide} review={reviews[currentSlide]} />
             </AnimatePresence>
           </div>
 
+          {/* Mobile Navigation Buttons - Below content */}
+          <div className="flex justify-center space-x-4 mt-4 sm:hidden">
+            <button
+              onClick={prevSlide}
+              className="bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors focus-ring"
+              aria-label="Previous review"
+            >
+              <ChevronLeft className="w-5 h-5 text-black" />
+            </button>
+            
+            <button
+              onClick={nextSlide}
+              className="bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors focus-ring"
+              aria-label="Next review"
+            >
+              <ChevronRight className="w-5 h-5 text-black" />
+            </button>
+          </div>
+
           {/* Slide Indicators */}
-          <div className="flex justify-center space-x-2 mt-8">
+          <div className="flex justify-center space-x-2 mt-6 sm:mt-8">
             {reviews.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-colors focus-ring ${
+                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-colors focus-ring ${
                   index === currentSlide 
                     ? 'bg-gold-500' 
                     : 'bg-gray-300 hover:bg-gray-400'
@@ -239,8 +256,8 @@ export const ReviewsSection = () => {
           </div>
 
           {/* Progress Indicator */}
-          <div className="flex justify-center mt-4">
-            <span className="text-sm text-black-50">
+          <div className="flex justify-center mt-3 sm:mt-4">
+            <span className="text-xs sm:text-sm text-black-50">
               {currentSlide + 1} / {totalReviews}
             </span>
           </div>
