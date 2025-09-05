@@ -21,8 +21,9 @@ interface ContactSubmission {
   adjusterContact?: string;
   fleetSize?: string;
   contactRole?: string;
-  // Photo count
+  // Photo count and URLs
   photos?: number;
+  photoUrls?: string[];
 }
 
 // Email configuration - using process.env directly in nodemailer config
@@ -156,6 +157,19 @@ async function sendEmail(data: ContactSubmission): Promise<boolean> {
                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Photos:</td>
                 <td style="padding: 8px 0; color: #333;">${data.photos} photo(s) attached</td>
               </tr>`;
+    
+    // Add photo links if available
+    if (data.photoUrls && data.photoUrls.length > 0) {
+      htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Photo Links:</td>
+                <td style="padding: 8px 0; color: #333;">
+                  ${data.photoUrls.map((url, index) => 
+                    `<a href="${url}" style="color: #e8b347; text-decoration: none; margin-right: 10px;">Photo ${index + 1}</a>`
+                  ).join('')}
+                </td>
+              </tr>`;
+    }
   }
   
   htmlBody += `
@@ -193,7 +207,7 @@ CONTACT DETAILS:
 Name: ${data.name}
 Email: ${data.email}
 Phone: ${data.phone}
-Service: ${data.subject}${data.companyName ? `\nCompany: ${data.companyName}` : ''}${data.claimNumber ? `\nClaim #: ${data.claimNumber}` : ''}${data.adjusterContact ? `\nAdjuster: ${data.adjusterContact}` : ''}${data.fleetSize ? `\nFleet Size: ${data.fleetSize}` : ''}${data.contactRole ? `\nRole: ${data.contactRole}` : ''}${data.photos && data.photos > 0 ? `\nPhotos: ${data.photos} photo(s) attached` : ''}
+Service: ${data.subject}${data.companyName ? `\nCompany: ${data.companyName}` : ''}${data.claimNumber ? `\nClaim #: ${data.claimNumber}` : ''}${data.adjusterContact ? `\nAdjuster: ${data.adjusterContact}` : ''}${data.fleetSize ? `\nFleet Size: ${data.fleetSize}` : ''}${data.contactRole ? `\nRole: ${data.contactRole}` : ''}${data.photos && data.photos > 0 ? `\nPhotos: ${data.photos} photo(s) attached` : ''}${data.photoUrls && data.photoUrls.length > 0 ? `\nPhoto Links: ${data.photoUrls.join(', ')}` : ''}
 
 MESSAGE:
 ${data.message}
@@ -289,6 +303,7 @@ export async function POST(request: NextRequest) {
       fleetSize: body.fleetSize ? sanitizeInput(body.fleetSize, 20) : undefined,
       contactRole: body.contactRole ? sanitizeInput(body.contactRole, 100) : undefined,
       photos: body.photos || 0,
+      photoUrls: body.photoUrls || [],
     };
 
     // Send email notification

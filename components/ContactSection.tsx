@@ -163,6 +163,30 @@ export const ContactSection = () => {
     setIsSubmitting(true);
 
     try {
+      // Handle file uploads first
+      let photoUrls: string[] = [];
+      
+      if (formData.photos && formData.photos.length > 0) {
+        // Upload photos to our API endpoint
+        const uploadFormData = new FormData();
+        formData.photos.forEach((file) => {
+          uploadFormData.append('photos', file);
+        });
+
+        const uploadResponse = await fetch('/api/upload-photos', {
+          method: 'POST',
+          body: uploadFormData,
+        });
+
+        if (uploadResponse.ok) {
+          const uploadResult = await uploadResponse.json();
+          photoUrls = uploadResult.photoUrls || [];
+        } else {
+          console.error('Photo upload failed');
+          // Continue without photos rather than failing the entire form
+        }
+      }
+
       // Prepare form data for API submission
       const submissionData = {
         name: formData.name.trim(),
@@ -178,8 +202,9 @@ export const ContactSection = () => {
         adjusterContact: formData.adjusterContact?.trim() || '',
         fleetSize: formData.fleetSize?.trim() || '',
         contactRole: formData.contactRole?.trim() || '',
-        // Photos will be handled separately for now
+        // Photos
         photos: formData.photos?.length || 0,
+        photoUrls: photoUrls,
       };
 
       // Submit to API
