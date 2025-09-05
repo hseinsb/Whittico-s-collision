@@ -206,7 +206,7 @@ export const Hero = () => {
               }}
               className="bg-gold-500 text-black px-8 py-4 rounded-lg text-lg font-semibold btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
             >
-              Get Free Estimate
+              Start Your Estimate or Partnership Request
                   </motion.button>
                   
                   <motion.button

@@ -320,7 +320,7 @@ export const Header = () => {
                     onClick={() => handleNavClick('#contact')}
                     className="w-full bg-gold-500 text-black px-4 py-3 rounded-lg font-medium btn-shimmer focus-ring hover:bg-gold-600 transition-colors"
                   >
-                    Get Quote
+                    Request Estimate / Partnership
                   </motion.button>
                 </div>
               </nav>

@@ -215,7 +215,7 @@ export const PartnerAdvantages = () => {
                   }
                 }}
               >
-                Become a Partner
+                Get Service or Partner With Us
               </motion.button>
               <motion.button
                 variants={MOTION_CONFIG.variants.buttonHover}
