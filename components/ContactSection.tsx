@@ -118,9 +118,34 @@ export const ContactSection = () => {
 
     setIsSubmitting(true);
 
-    // Simulate form submission
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Prepare form data for API submission
+      const submissionData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        subject: formData.service || 'Contact Form Submission',
+        message: formData.message.trim(),
+        source: 'website',
+        userAgent: navigator.userAgent,
+      };
+
+      // Submit to API
+      const response = await fetch('/api/submit-contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit form');
+      }
+
+      // Success - show thank you message
       setIsSubmitted(true);
       setFormData({
         name: '',
@@ -129,8 +154,13 @@ export const ContactSection = () => {
         service: '',
         message: '',
       });
+
     } catch (error) {
       console.error('Form submission error:', error);
+      // Show error to user
+      setErrors({ 
+        submit: error instanceof Error ? error.message : 'Failed to submit form. Please try again.' 
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -140,6 +170,10 @@ export const ContactSection = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+    // Clear submission error when user starts typing
+    if (errors.submit) {
+      setErrors(prev => ({ ...prev, submit: '' }));
     }
   };
 
@@ -510,6 +544,21 @@ export const ContactSection = () => {
                         )}
                       </AnimatePresence>
                     </div>
+
+                    {/* Submission Error Display */}
+                    <AnimatePresence>
+                      {errors.submit && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="flex items-center space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700"
+                        >
+                          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                          <span className="text-sm">{errors.submit}</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
                     {/* Submit Button */}
                     <motion.button
