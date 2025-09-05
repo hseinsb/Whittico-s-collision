@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend (will be created when needed)
+let resend: Resend | null = null;
 
 // Interface for the form submission data
 interface ContactSubmission {
@@ -15,6 +15,14 @@ interface ContactSubmission {
   userAgent: string;
   timestamp: string;
   ip: string;
+  // Dynamic fields for insurance/rental partners
+  companyName?: string;
+  claimNumber?: string;
+  adjusterContact?: string;
+  fleetSize?: string;
+  contactRole?: string;
+  // Photo count
+  photos?: number;
 }
 
 // Email configuration - using process.env directly in nodemailer config
@@ -65,10 +73,15 @@ async function sendEmail(data: ContactSubmission): Promise<boolean> {
       return false;
     }
 
+    // Initialize Resend only when needed
+    if (!resend) {
+      resend = new Resend(process.env.RESEND_API_KEY);
+    }
+
     const subject = `[Whittico Web] ${data.subject} – ${data.name}`;
     const replyTo = validateEmail(data.email) ? data.email : 'info@whitticoscollision.co';
 
-    const htmlBody = `
+    let htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #f6e197 0%, #e8b347 100%); padding: 20px; text-align: center;">
           <h1 style="color: white; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">New Website Contact</h1>
@@ -94,7 +107,58 @@ async function sendEmail(data: ContactSubmission): Promise<boolean> {
               <tr style="border-bottom: 1px solid #eee;">
                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Service:</td>
                 <td style="padding: 8px 0; color: #333;">${data.subject}</td>
-              </tr>
+              </tr>`;
+  
+  // Add dynamic fields if present
+  if (data.companyName) {
+    htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Company:</td>
+                <td style="padding: 8px 0; color: #333;">${data.companyName}</td>
+              </tr>`;
+  }
+  
+  if (data.claimNumber) {
+    htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Claim #:</td>
+                <td style="padding: 8px 0; color: #333;">${data.claimNumber}</td>
+              </tr>`;
+  }
+  
+  if (data.adjusterContact) {
+    htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Adjuster:</td>
+                <td style="padding: 8px 0; color: #333;">${data.adjusterContact}</td>
+              </tr>`;
+  }
+  
+  if (data.fleetSize) {
+    htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Fleet Size:</td>
+                <td style="padding: 8px 0; color: #333;">${data.fleetSize}</td>
+              </tr>`;
+  }
+  
+  if (data.contactRole) {
+    htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Role:</td>
+                <td style="padding: 8px 0; color: #333;">${data.contactRole}</td>
+              </tr>`;
+  }
+  
+  if (data.photos && data.photos > 0) {
+    htmlBody += `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Photos:</td>
+                <td style="padding: 8px 0; color: #333;">${data.photos} photo(s) attached</td>
+              </tr>`;
+  }
+  
+  htmlBody += `
             </table>
             
             <h3 style="color: #333; margin: 25px 0 10px 0;">Message:</h3>
@@ -129,7 +193,7 @@ CONTACT DETAILS:
 Name: ${data.name}
 Email: ${data.email}
 Phone: ${data.phone}
-Service: ${data.subject}
+Service: ${data.subject}${data.companyName ? `\nCompany: ${data.companyName}` : ''}${data.claimNumber ? `\nClaim #: ${data.claimNumber}` : ''}${data.adjusterContact ? `\nAdjuster: ${data.adjusterContact}` : ''}${data.fleetSize ? `\nFleet Size: ${data.fleetSize}` : ''}${data.contactRole ? `\nRole: ${data.contactRole}` : ''}${data.photos && data.photos > 0 ? `\nPhotos: ${data.photos} photo(s) attached` : ''}
 
 MESSAGE:
 ${data.message}
@@ -164,6 +228,15 @@ export async function POST(request: NextRequest) {
     // Get client IP
     const forwarded = request.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';
+
+    // Check if Resend API key is available
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY environment variable is not set');
+      return NextResponse.json(
+        { error: 'Email service is not configured. Please contact us directly.' },
+        { status: 503 }
+      );
+    }
 
     // Rate limiting check
     if (isRateLimited(ip)) {
@@ -209,6 +282,13 @@ export async function POST(request: NextRequest) {
       message: sanitizeInput(body.message, 2000),
       ip: ip,
       userAgent: sanitizeInput(body.userAgent || '', 500),
+      // Dynamic fields
+      companyName: body.companyName ? sanitizeInput(body.companyName, 100) : undefined,
+      claimNumber: body.claimNumber ? sanitizeInput(body.claimNumber, 50) : undefined,
+      adjusterContact: body.adjusterContact ? sanitizeInput(body.adjusterContact, 100) : undefined,
+      fleetSize: body.fleetSize ? sanitizeInput(body.fleetSize, 20) : undefined,
+      contactRole: body.contactRole ? sanitizeInput(body.contactRole, 100) : undefined,
+      photos: body.photos || 0,
     };
 
     // Send email notification

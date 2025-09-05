@@ -12,6 +12,14 @@ interface FormData {
   phone: string;
   service: string;
   message: string;
+  // Dynamic fields for insurance/rental partners
+  companyName?: string;
+  claimNumber?: string;
+  adjusterContact?: string;
+  fleetSize?: string;
+  contactRole?: string;
+  // Photo uploads
+  photos?: File[];
 }
 
 interface FormErrors {
@@ -50,13 +58,10 @@ const contactInfo = [
 ];
 
 const serviceOptions = [
-  'Collision Repair',
-  'Insurance Claims',
-  'Paintless Dent Repair',
-  'Auto Painting',
-  'Frame Straightening',
-  'Glass Replacement',
-  'Other Services',
+  'Customer Estimate / Repair Request',
+  'Insurance Partner / DRP Inquiry',
+  'Rental Partner Inquiry',
+  'Other',
 ];
 
 export const ContactSection = () => {
@@ -66,11 +71,45 @@ export const ContactSection = () => {
     phone: '',
     service: '',
     message: '',
+    companyName: '',
+    claimNumber: '',
+    adjusterContact: '',
+    fleetSize: '',
+    contactRole: '',
+    photos: [],
   });
   
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Helper functions
+  const isInsurancePartner = formData.service === 'Insurance Partner / DRP Inquiry';
+  const isRentalPartner = formData.service === 'Rental Partner Inquiry';
+  const showDynamicFields = isInsurancePartner || isRentalPartner;
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 5) {
+      setErrors(prev => ({ ...prev, photos: 'Maximum 5 photos allowed' }));
+      return;
+    }
+    
+    // Validate file types and sizes
+    const validFiles = files.filter(file => {
+      const isValidType = file.type === 'image/jpeg' || file.type === 'image/png';
+      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
+      return isValidType && isValidSize;
+    });
+
+    if (validFiles.length !== files.length) {
+      setErrors(prev => ({ ...prev, photos: 'Only JPG/PNG files under 5MB allowed' }));
+    } else {
+      setErrors(prev => ({ ...prev, photos: '' }));
+    }
+
+    setFormData(prev => ({ ...prev, photos: validFiles }));
+  };
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -91,6 +130,11 @@ export const ContactSection = () => {
 
     if (!formData.service) {
       newErrors.service = 'Please select a service';
+    }
+
+    // Validate dynamic fields
+    if (showDynamicFields && !formData.companyName?.trim()) {
+      newErrors.companyName = 'Company name is required for partnerships';
     }
 
     if (!formData.message.trim()) {
@@ -128,6 +172,14 @@ export const ContactSection = () => {
         message: formData.message.trim(),
         source: 'website',
         userAgent: navigator.userAgent,
+        // Dynamic fields
+        companyName: formData.companyName?.trim() || '',
+        claimNumber: formData.claimNumber?.trim() || '',
+        adjusterContact: formData.adjusterContact?.trim() || '',
+        fleetSize: formData.fleetSize?.trim() || '',
+        contactRole: formData.contactRole?.trim() || '',
+        // Photos will be handled separately for now
+        photos: formData.photos?.length || 0,
       };
 
       // Submit to API
@@ -153,6 +205,12 @@ export const ContactSection = () => {
         phone: '',
         service: '',
         message: '',
+        companyName: '',
+        claimNumber: '',
+        adjusterContact: '',
+        fleetSize: '',
+        contactRole: '',
+        photos: [],
       });
 
     } catch (error) {
@@ -509,6 +567,185 @@ export const ContactSection = () => {
                           )}
                         </AnimatePresence>
                       </div>
+                    </div>
+
+                    {/* Dynamic Fields for Insurance/Rental Partners */}
+                    <AnimatePresence>
+                      {showDynamicFields && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="space-y-4"
+                        >
+                          <div className="border-t border-gray-200 pt-4">
+                            <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                              {isInsurancePartner ? 'Insurance Partner Details' : 'Rental Partner Details'}
+                            </h4>
+                            
+                            {/* Company Name - Required for both */}
+                            <div className="mb-4">
+                              <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-2">
+                                Company Name *
+                              </label>
+                              <motion.div
+                                variants={inputVariants}
+                                animate={errors.companyName ? 'error' : 'rest'}
+                                whileFocus="focus"
+                              >
+                                <input
+                                  type="text"
+                                  id="companyName"
+                                  value={formData.companyName || ''}
+                                  onChange={(e) => handleInputChange('companyName', e.target.value)}
+                                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200"
+                                  placeholder={isInsurancePartner ? 'Insurance Company Name' : 'Rental Company Name'}
+                                />
+                              </motion.div>
+                              <AnimatePresence>
+                                {errors.companyName && (
+                                  <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex items-center space-x-1 mt-1 text-red-600 text-sm"
+                                  >
+                                    <AlertCircle className="w-4 h-4" />
+                                    <span>{errors.companyName}</span>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+
+                            {/* Insurance-specific fields */}
+                            {isInsurancePartner && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label htmlFor="claimNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Claim Number (Optional)
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="claimNumber"
+                                    value={formData.claimNumber || ''}
+                                    onChange={(e) => handleInputChange('claimNumber', e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200"
+                                    placeholder="Claim #123456"
+                                  />
+                                </div>
+                                <div>
+                                  <label htmlFor="adjusterContact" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Adjuster Contact (Optional)
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="adjusterContact"
+                                    value={formData.adjusterContact || ''}
+                                    onChange={(e) => handleInputChange('adjusterContact', e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200"
+                                    placeholder="Adjuster Name"
+                                  />
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Rental-specific fields */}
+                            {isRentalPartner && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label htmlFor="fleetSize" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Fleet Size (Optional)
+                                  </label>
+                                  <select
+                                    id="fleetSize"
+                                    value={formData.fleetSize || ''}
+                                    onChange={(e) => handleInputChange('fleetSize', e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200 bg-white"
+                                  >
+                                    <option value="">Select fleet size</option>
+                                    <option value="1-10">1-10 vehicles</option>
+                                    <option value="11-50">11-50 vehicles</option>
+                                    <option value="51-100">51-100 vehicles</option>
+                                    <option value="100+">100+ vehicles</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label htmlFor="contactRole" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Your Role (Optional)
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="contactRole"
+                                    value={formData.contactRole || ''}
+                                    onChange={(e) => handleInputChange('contactRole', e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition-all duration-200"
+                                    placeholder="Fleet Manager, Operations Director, etc."
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Photo Upload */}
+                    <div>
+                      <label htmlFor="photos" className="block text-sm font-medium text-gray-700 mb-2">
+                        Attach Photos (Optional)
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gold-400 transition-colors">
+                        <input
+                          type="file"
+                          id="photos"
+                          multiple
+                          accept="image/jpeg,image/png"
+                          onChange={handlePhotoChange}
+                          className="hidden"
+                        />
+                        <label htmlFor="photos" className="cursor-pointer">
+                          <div className="space-y-2">
+                            <div className="text-gray-600">
+                              <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              <span className="font-medium text-gold-600 hover:text-gold-500">Click to upload</span> or drag and drop
+                            </div>
+                            <p className="text-xs text-gray-500">PNG, JPG up to 5MB each (max 5 photos)</p>
+                          </div>
+                        </label>
+                      </div>
+                      
+                      {/* Show selected photos */}
+                      {formData.photos && formData.photos.length > 0 && (
+                        <div className="mt-4">
+                          <p className="text-sm text-gray-600 mb-2">Selected photos:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {formData.photos.map((file, index) => (
+                              <div key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                                {file.name}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      <AnimatePresence>
+                        {errors.photos && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="flex items-center space-x-1 mt-2 text-red-600 text-sm"
+                          >
+                            <AlertCircle className="w-4 h-4" />
+                            <span>{errors.photos}</span>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
 
                     {/* Message */}
