@@ -165,7 +165,7 @@ async function sendEmail(data: ContactSubmission): Promise<boolean> {
                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Photo Links:</td>
                 <td style="padding: 8px 0; color: #333;">
                   ${data.photoUrls.map((url, index) => 
-                    `<a href="${url}" style="color: #e8b347; text-decoration: none; margin-right: 10px;">Photo ${index + 1}</a>`
+                    `<a href="${url}" style="color: #e8b347; text-decoration: none; margin-right: 15px; padding: 5px 10px; background: #f8f8f8; border-radius: 4px; border: 1px solid #e8b347;">📷 Photo ${index + 1}</a>`
                   ).join('')}
                 </td>
               </tr>`;

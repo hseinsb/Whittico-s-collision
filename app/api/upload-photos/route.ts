@@ -1,4 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { v2 as cloudinary } from 'cloudinary';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+import { existsSync } from 'fs';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Fallback for local development
+const uploadsDir = join(process.cwd(), 'public', 'uploads');
+
+async function ensureUploadsDir() {
+  if (!existsSync(uploadsDir)) {
+    await mkdir(uploadsDir, { recursive: true });
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,16 +53,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For now, we'll return the files as base64 data URLs
-    // In production, you'd upload to cloud storage (AWS S3, Cloudinary, etc.)
-    const photoUrls = await Promise.all(
-      validFiles.map(async (file) => {
-        const buffer = await file.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString('base64');
-        const dataUrl = `data:${file.type};base64,${base64}`;
-        return dataUrl;
-      })
-    );
+    // Check if Cloudinary is configured (for production)
+    const useCloudinary = process.env.CLOUDINARY_CLOUD_NAME && 
+                         process.env.CLOUDINARY_API_KEY && 
+                         process.env.CLOUDINARY_API_SECRET;
+
+    let photoUrls: string[] = [];
+
+    if (useCloudinary) {
+      // Upload to Cloudinary (production)
+      photoUrls = await Promise.all(
+        validFiles.map(async (file, index) => {
+          const buffer = await file.arrayBuffer();
+          const base64 = Buffer.from(buffer).toString('base64');
+          const dataUrl = `data:${file.type};base64,${base64}`;
+          
+          try {
+            const result = await cloudinary.uploader.upload(dataUrl, {
+              folder: 'whitticos-collision/photos',
+              public_id: `contact_${Date.now()}_${index}`,
+              resource_type: 'auto',
+              quality: 'auto',
+              fetch_format: 'auto',
+            });
+            
+            return result.secure_url;
+          } catch (error) {
+            console.error('Cloudinary upload error:', error);
+            throw new Error('Failed to upload photo');
+          }
+        })
+      );
+    } else {
+      // Fallback to local storage (development)
+      await ensureUploadsDir();
+      photoUrls = await Promise.all(
+        validFiles.map(async (file, index) => {
+          const timestamp = Date.now();
+          const filename = `photo_${timestamp}_${index}.${file.type.split('/')[1]}`;
+          const filepath = join(uploadsDir, filename);
+          
+          const buffer = await file.arrayBuffer();
+          await writeFile(filepath, Buffer.from(buffer));
+          
+          // Return the public URL
+          return `${request.nextUrl.origin}/uploads/${filename}`;
+        })
+      );
+    }
 
     return NextResponse.json({
       success: true,
